@@ -11,6 +11,7 @@ const Wrapper = styled.main`
     overflow: hidden;
   }
   nav img {
+    margin-top: 20px;
     width: 20%;
   }
   .page {

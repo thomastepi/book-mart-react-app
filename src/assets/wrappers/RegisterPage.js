@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const Wrapper = styled.section`
   display: grid;
@@ -31,14 +31,15 @@ const Wrapper = styled.section`
     cursor: pointer;
     letter-spacing: var(--letterSpacing);
   }
-  .logo{
+  .logo {
+    width: 50%;
+    height: 130px;
     text-align: center;
-    margin-bottom: 0;
-    
+    margin-bottom: 0.1rem;
   }
-  .logo img{
+  .logo img {
     width: 200px;
     height: 150px;
-  } 
-`
-export default Wrapper
+  }
+`;
+export default Wrapper;

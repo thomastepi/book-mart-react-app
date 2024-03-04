@@ -5,14 +5,26 @@ import Loading from "./Loading";
 import Wrapper from "../assets/wrappers/BooksContainer";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllBooks } from "../features/allbooks/allbooksSlice";
+import PageBtnContainer from "./PageBtnContainer";
 
 const BooksContainer = () => {
-  const { books, isLoading } = useSelector((state) => state.allBooks);
+  const {
+    books,
+    isLoading,
+    totalBooks,
+    numOfPages,
+    page,
+    search,
+    availability,
+    genre,
+    sort,
+    price,
+  } = useSelector((state) => state.allBooks);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllBooks());
-  }, [dispatch]);
+  }, [dispatch, search, availability, genre, sort, price, page]);
 
   if (isLoading) {
     return <Loading />;
@@ -28,12 +40,15 @@ const BooksContainer = () => {
 
   return (
     <Wrapper>
-      <h5 className="">books info</h5>
-      <div className="jobs">
+      <h5 className="">Number of Books: {totalBooks}</h5>
+      <div className="books">
         {books.map((book) => {
           return <Book key={book._id} {...book} />;
         })}
       </div>
+      {numOfPages > 1 && (
+        <PageBtnContainer page={page} numOfPages={numOfPages} />
+      )}
     </Wrapper>
   );
 };

@@ -5,8 +5,9 @@ import AuthHeader from "../../utils/AuthHeader";
 
 const initialFilterState = {
   search: "",
-  searchStatus: "all",
-  searchType: "all",
+  price: "",
+  availability: "all",
+  genre: "all",
   sort: "latest",
   sortOptions: ["latest", "oldest", "a-z", "z-a"],
 };
@@ -24,7 +25,9 @@ const initialState = {
 export const getAllBooks = createAsyncThunk(
   "allBooks/getAllBooks",
   async (_, thunkAPI) => {
-    let url = "/api/books/getBooks";
+    const { search, availability, genre, sort, page, price } =
+      thunkAPI.getState().allBooks;
+    let url = `/api/books/getBooks?title=${search}&availability=${availability}&genre=${genre}&sort=${sort}&page=${page}&price=${price}`;
     try {
       const response = await customFetch(url, AuthHeader(thunkAPI));
       return response.data;
@@ -52,21 +55,36 @@ const allBooksSlice = createSlice({
   initialState,
   reducers: {
     showLoading: (state) => {
-        state.isLoading = true;
-        },
+      state.isLoading = true;
+    },
     hideLoading: (state) => {
-        state.isLoading = false;
-        },
+      state.isLoading = false;
+    },
+    handleChange: (state, action) => {
+      state.page = 1;
+      state[action.payload.name] = action.payload.value;
+    },
+    resetFilter: (state) => {
+      Object.assign(state, initialFilterState);
+    },
+    changePage: (state, action) => {
+      state.page = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getAllBooks.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getAllBooks.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.books = action.payload.books;
-      })
+      .addCase(
+        getAllBooks.fulfilled,
+        (state, { payload: { books, totalBooks, numOfPages } }) => {
+          state.isLoading = false;
+          state.books = books;
+          state.totalBooks = totalBooks;
+          state.numOfPages = numOfPages;
+        }
+      )
       .addCase(getAllBooks.rejected, (state, action) => {
         state.isLoading = false;
         toast.error(action.payload);
@@ -85,5 +103,11 @@ const allBooksSlice = createSlice({
   },
 });
 
-export const { showLoading, hideLoading } = allBooksSlice.actions;
+export const {
+  showLoading,
+  hideLoading,
+  handleChange,
+  resetFilter,
+  changePage,
+} = allBooksSlice.actions;
 export default allBooksSlice.reducer;
