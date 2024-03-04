@@ -13,12 +13,10 @@ const Landing = () => {
         </nav>
         <div className="container page">
           <div className="info">
-            <h1>Explore our book collection</h1>
-            <p>
-              We have a wide range of books for you to choose from. You can find
-              books from various genres and authors. You can also find books for
-              different age groups.
-            </p>
+            <h1>
+              <span>Admin Dashboard:</span> Explore and Control Your Book
+              Inventory
+            </h1>
             <Link to="/register" className="btn btn-hero">
               Login/Register
             </Link>
