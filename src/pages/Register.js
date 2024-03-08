@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { registerUser, loginUser } from "../features/user/userSlice";
+import { Modal } from 'antd'
 
 const initialValues = {
   name: "",
@@ -16,6 +17,7 @@ const initialValues = {
 
 const Register = () => {
   const [values, setValues] = React.useState(initialValues);
+  const [showModal, setShowModal] = React.useState(false);
   const dispatch = useDispatch();
   const { isLoading, user } = useSelector((state) => state.user);
   const navigate = useNavigate();
@@ -41,6 +43,9 @@ const Register = () => {
     } else {
       dispatch(registerUser({ name, email, password }));
     }
+    setTimeout(() => {
+      setShowModal(true);
+    }, 8000);
   };
 
   useEffect(() => {
@@ -56,7 +61,6 @@ const Register = () => {
       <form className="form" onSubmit={handleSubmit}>
         <div className="logo">
           <img src={logo} alt="logo" />
-          {/* <Logo /> */}
         </div>
         <h3>{values.isMember ? "Login" : "Register"}</h3>
         {!values.isMember && (
@@ -82,6 +86,17 @@ const Register = () => {
           values={values.password}
           onChange={handleChange}
         />
+        {isLoading && showModal && (
+          <Modal
+            title="Loading..."
+            visible={true}
+            footer={null}
+            closable={false}
+          >
+            <p>This project is hosted on a free server instance that might take a moment to spin up if inactive.</p>
+            <p>We'll have you signed as soon as possible. Thank you for your patience!</p>
+          </Modal>
+        )}
 
         <button type="submit" className="btn btn-block">
           {isLoading ? "Loading..." : values.isMember ? "Login" : "Register"}
