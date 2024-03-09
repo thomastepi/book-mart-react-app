@@ -48,6 +48,13 @@ const Register = () => {
     }, 8000);
   };
 
+  const handleGuestLogin = (data) => {
+    dispatch(loginUser(data));
+    setTimeout(() => {
+      setShowModal(true);
+    }, 8000);
+  };
+
   useEffect(() => {
     if (user) {
       setTimeout(() => {
@@ -106,9 +113,7 @@ const Register = () => {
           className="btn btn-block btn-hipster"
           disabled={isLoading}
           onClick={() => {
-            dispatch(
-              loginUser({ email: "guest@guest.com", password: "0000" })
-            );
+            handleGuestLogin({ email: "guest@guest.com", password: "0000" });
           }}
         >
           {isLoading ? "Loading..." : "Explore as Guest"}
