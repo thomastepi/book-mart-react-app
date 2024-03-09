@@ -45,14 +45,14 @@ const Register = () => {
     }
     setTimeout(() => {
       setShowModal(true);
-    }, 5000);
+    }, 4000);
   };
 
   const handleGuestLogin = (data) => {
     dispatch(loginUser(data));
     setTimeout(() => {
       setShowModal(true);
-    }, 5000);
+    }, 4000);
   };
 
   useEffect(() => {
@@ -101,7 +101,7 @@ const Register = () => {
             closable={false}
           >
             <p>This project is hosted on a free server instance that might take a moment to spin up if inactive.</p>
-            <p>We'll have you signed as soon as possible. Thank you for your patience!</p>
+            <p>We'll have you signed in as soon as possible. Thank you for your patience!</p>
           </Modal>
         )}
 
