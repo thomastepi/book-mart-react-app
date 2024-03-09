@@ -45,14 +45,14 @@ const Register = () => {
     }
     setTimeout(() => {
       setShowModal(true);
-    }, 8000);
+    }, 5000);
   };
 
   const handleGuestLogin = (data) => {
     dispatch(loginUser(data));
     setTimeout(() => {
       setShowModal(true);
-    }, 8000);
+    }, 5000);
   };
 
   useEffect(() => {
