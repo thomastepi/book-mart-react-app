@@ -12,6 +12,7 @@ const initialState = {
   isLoading: false,
   isSidebarOpen: false,
   user: getUserFromLocalStorage(),
+  guestMessage: "",
 };
 
 export const registerUser = createAsyncThunk(
@@ -43,7 +44,11 @@ export const updateUser = createAsyncThunk(
   async (user, thunkAPI) => {
     console.log(thunkAPI.getState().user);
     try {
-      const response = await customFetch.patch("/api/users/update", user, AuthHeader(thunkAPI));
+      const response = await customFetch.patch(
+        "/api/users/update",
+        user,
+        AuthHeader(thunkAPI)
+      );
       return response.data;
     } catch (error) {
       console.log("Error: ", error);
@@ -71,9 +76,12 @@ const userSlice = createSlice({
         toast.success(action.payload);
       }
     },
+    setGuestMessage: (state, action) => {
+      state.guestMessage = action.payload;
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(registerUser.pending, (state, action) => {
+    builder.addCase(registerUser.pending, (state) => {
       state.isLoading = true;
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
@@ -120,10 +128,10 @@ const userSlice = createSlice({
     builder.addCase(updateUser.rejected, (state, action) => {
       console.log("Action Error: ", action);
       state.isLoading = false;
-      toast.error(action.payload);
+      state.guestMessage = action.payload;
     });
   },
 });
 
-export const { toggleSidebar, logout } = userSlice.actions;
+export const { toggleSidebar, logout, setGuestMessage } = userSlice.actions;
 export default userSlice.reducer;

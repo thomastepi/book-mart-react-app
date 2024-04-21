@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import customFetch from "../../utils/axios";
-import { logout } from "../user/userSlice";
+import { logout, setGuestMessage } from "../user/userSlice";
 import {
   showLoading,
   hideLoading,
@@ -50,11 +50,11 @@ export const addBook = createAsyncThunk(
       thunkAPI.dispatch(clearValues());
       return data;
     } catch (error) {
-      console.log("Error: ", error);
       if (error.response.status === 401) {
         thunkAPI.dispatch(logout());
         return thunkAPI.rejectWithValue("Unauthorized! Please login again.");
       }
+      thunkAPI.dispatch(setGuestMessage(error.response.data));
       return thunkAPI.rejectWithValue(error.response.data);
     }
   }
@@ -73,7 +73,7 @@ export const deleteBook = createAsyncThunk(
       thunkAPI.dispatch(getAllBooks());
       return response.data;
     } catch (error) {
-      console.log("Error: ", error);
+      thunkAPI.dispatch(setGuestMessage(error.response.data));
       if (error.response.status === 401) {
         thunkAPI.dispatch(logout());
         return thunkAPI.rejectWithValue("Unauthorized! Please login again.");
@@ -96,7 +96,7 @@ export const updateBook = createAsyncThunk(
       thunkAPI.dispatch(clearValues());
       return data;
     } catch (error) {
-      console.log("Error: ", error);
+      thunkAPI.dispatch(setGuestMessage(error.response.data));
       if (error.response.status === 401) {
         thunkAPI.dispatch(logout());
         return thunkAPI.rejectWithValue("Unauthorized! Please login again.");
@@ -132,7 +132,6 @@ const bookSlice = createSlice({
     });
     builder.addCase(addBook.rejected, (state, action) => {
       state.isLoading = false;
-      toast.error(action.payload);
     });
     builder.addCase(deleteBook.pending, (state) => {
       state.isLoading = true;
@@ -143,7 +142,6 @@ const bookSlice = createSlice({
     });
     builder.addCase(deleteBook.rejected, (state, action) => {
       state.isLoading = false;
-      toast.error(action.payload);
     });
     builder.addCase(updateBook.pending, (state) => {
       state.isLoading = true;
@@ -154,7 +152,6 @@ const bookSlice = createSlice({
     });
     builder.addCase(updateBook.rejected, (state, action) => {
       state.isLoading = false;
-      toast.error(action.payload);
     });
   },
 });

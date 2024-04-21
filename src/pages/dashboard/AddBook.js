@@ -2,9 +2,16 @@ import React, { useEffect } from "react";
 import { FormRow, FormRowSelect } from "../../components";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
 import { useDispatch, useSelector } from "react-redux";
-import { addBook, updateBook } from "../../features/book/bookSlice";
+import {
+  addBook,
+  updateBook,
+  handleChange,
+  clearValues,
+} from "../../features/book/bookSlice";
+import { setGuestMessage } from "../../features/user/userSlice";
 import { toast } from "react-toastify";
-import { handleChange, clearValues } from "../../features/book/bookSlice";
+//import { handleChange, clearValues } from "../../features/book/bookSlice";
+import { Modal } from "antd";
 
 const AddBook = () => {
   const {
@@ -19,8 +26,23 @@ const AddBook = () => {
     isEditing,
     editBookId,
   } = useSelector((state) => state.book);
-  const { user } = useSelector((state) => state.user);
+  const { user, guestMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (guestMessage) {
+      const modal = Modal.info();
+      modal.update({
+        title: "Limited Access!",
+        content: guestMessage,
+        okText: "Close",
+        onOk: () => {
+          dispatch(setGuestMessage(""));
+          modal.destroy();
+        },
+      });
+    }
+  }, [guestMessage, dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

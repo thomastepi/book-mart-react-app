@@ -1,13 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
 import { useSelector, useDispatch } from "react-redux";
 import FormRow from "../../components/FormRow";
 import { toast } from "react-toastify";
-import { updateUser } from "../../features/user/userSlice";
+import { updateUser, setGuestMessage } from "../../features/user/userSlice";
+import { Modal } from "antd";
 
 const Profile = () => {
-  const { user, isLoading } = useSelector((state) => state.user);
+  const { user, isLoading, guestMessage } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (guestMessage) {
+      const modal = Modal.info();
+      modal.update({
+        title: "Limited Access!",
+        content: guestMessage,
+        okText: "Close",
+        onOk: () => {
+          dispatch(setGuestMessage(""));
+          modal.destroy();
+        },
+      });
+    }
+  }, [guestMessage, dispatch]);
 
   const [userData, setUserData] = useState({
     name: user?.name || "",
@@ -22,7 +38,7 @@ const Profile = () => {
     if (name === "" || email === "" || lastName === "" || location === "") {
       toast.error("Please fill in all fields");
       return;
-    };
+    }
     dispatch(updateUser(userData));
   };
 
