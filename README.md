@@ -4,6 +4,8 @@
 
 The BookMart Admin Panel is a web application designed to manage the operations of BookMart, a bookstore. This application provides functionalities for managing book inventory, user profiles, and access controls with both authenticated and guest access.
 
+## [![BookMart](https://img.shields.io/badge/LIVE%20DEMO-<COLOR>.svg)](https://bookmart.thomastepi.com)
+
 ## Features
 
 - **User Authentication**: Users can create an account or log in using their email and password. Guests can also log in without an account to browse available books.
